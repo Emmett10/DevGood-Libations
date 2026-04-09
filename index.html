@@ -76,7 +76,7 @@ h2 {
   z-index: 3;
 }
 
-video {
+.video-container video {
   position: absolute;
   top: 0; left: 0;
   width: 100%;
@@ -146,9 +146,10 @@ footer {
 <div class="video-wrapper">
   <div class="video-container">
 
+    <!-- Poster image -->
     <div class="video-poster" id="videoPoster"></div>
 
-    <!-- Bunny.net Pull Zone Video -->
+    <!-- Video -->
     <video
       id="mainVideo"
       muted
@@ -163,7 +164,7 @@ footer {
       Your browser does not support the video tag.
     </video>
 
-    <!-- Password Overlay -->
+    <!-- Password overlay -->
     <div class="video-overlay" id="overlay">
       <div class="lock-icon">ENTER PASSWORD</div>
       <div class="password-box">
@@ -212,7 +213,6 @@ passwordInput.addEventListener("input", e => {
   }
 });
 
-// Pause on load, wait for password
 video.addEventListener("loadeddata", () => {
   video.currentTime = 0;
   video.pause();
