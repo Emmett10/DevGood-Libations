@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Good Libations - Home</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+
+<style>
+@font-face {
+  font-family: "MADE Sunflower";
+  src: url("fonts/MADE_Sunflower.woff2") format("woff2"),
+       url("fonts/MADE_Sunflower.woff") format("woff"),
+       url("fonts/MADE_Sunflower.otf") format("opentype");
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  background: #000;
+  color: #fff;
+  font-family: Arial, sans-serif;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 50px 20px;
+  text-align: center;
+}
+
+h1 {
+  font-family: 'Times New Roman', serif;
+  font-weight: bold;
+  font-size: 2vw;
+  margin-bottom: 40px;
+  line-height: 1;
+}
+
+h1 span { display: block; }
+
+@media (max-width: 600px) {
+  h1 { font-size: 6vw; }
+}
+
+h2 {
+  font-family: "MADE Sunflower", serif;
+  font-size: 2rem;
+  letter-spacing: 2px;
+  margin-bottom: 20px;
+  text-transform: uppercase;
+}
+
+.video-wrapper {
+  width: 100%;
+  max-width: 800px;
+  margin-bottom: 30px;
+}
+
+.video-container {
+  position: relative;
+  width: 100%;
+  padding-top: 75%; /* 4:3 aspect ratio */
+  background: black;
+  overflow: hidden;
+}
+
+.video-poster {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%;
+  height: 100%;
+  background: url('JoshLeos.png') center center / cover no-repeat;
+  z-index: 3;
+}
+
+.video-container video {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  background: black;
+  z-index: 2;
+}
+
+.video-overlay {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.6);
+  z-index: 4;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.lock-icon {
+  font-size: 0.8rem;
+  margin-bottom: 6px;
+  letter-spacing: 1px;
+  font-weight: bold;
+}
+
+.password-box input {
+  padding: 5px;
+  width: 120px;
+  font-size: 0.7rem;
+  border-radius: 4px;
+  border: 2px solid #fff;
+  background: transparent;
+  color: #fff;
+  text-align: center;
+}
+
+.social-icon {
+  margin-top: 10px;
+}
+
+.social-icon img {
+  height: 50px;
+}
+
+footer {
+  margin-top: auto;
+  font-family: "MADE Sunflower", serif;
+  font-size: 0.9rem;
+  padding: 10px;
+}
+</style>
+</head>
+
+<body>
+
+<h1>
+  <span>GOOD</span>
+  <span>LIBATIONS</span>
+</h1>
+
+<h2>JOSH LEOS</h2>
+
+<div class="video-wrapper">
+  <div class="video-container">
+
+    <div class="video-poster" id="videoPoster"></div>
+
+    <!-- Video using Bunny Pull Zone URL -->
+    <video
+      id="mainVideo"
+      muted
+      loop
+      playsinline
+      preload="metadata"
+      controls
+      controlsList="nodownload"
+      crossorigin="anonymous"
+      oncontextmenu="return false">
+      <source src="https://devgood-libations.b-cdn.net/new-josh-upload.mp4" type="video/mp4">
+      Your browser does not support the video tag.
+    </video>
+
+    <div class="video-overlay" id="overlay">
+      <div class="lock-icon">ENTER PASSWORD</div>
+      <div class="password-box">
+        <input type="text" id="passwordInput" autocomplete="off" placeholder="Password">
+      </div>
+    </div>
+
+  </div>
+
+  <div class="social-icon">
+    <a href="https://instagram.com/goodlibes?igsh=NTc4MTlwNjQ2YQ==" target="_blank" rel="noopener">
+      <img src="IG.avif" alt="Instagram">
+    </a>
+  </div>
+</div>
+
+<footer>
+  © 2025 Good Libations — All Rights Reserved
+</footer>
+
+<script>
+const overlay = document.getElementById("overlay");
+const video = document.getElementById("mainVideo");
+const poster = document.getElementById("videoPoster");
+const passwordInput = document.getElementById("passwordInput");
+
+let enteredPassword = "";
+const correctPassword = "CrunchwrapSupreme";
+
+passwordInput.addEventListener("input", e => {
+  const value = e.target.value;
+  const lastChar = value[value.length - 1] || "";
+
+  if (value.length > enteredPassword.length) {
+    enteredPassword += lastChar;
+  } else {
+    enteredPassword = enteredPassword.slice(0, value.length);
+  }
+
+  e.target.value = "*".repeat(enteredPassword.length);
+
+  if (enteredPassword === correctPassword) {
+    overlay.style.display = "none";
+    poster.style.display = "none";
+    video.play().catch(err => console.log("Playback blocked:", err));
+  }
+});
+
+video.addEventListener("loadeddata", () => {
+  video.currentTime = 0;
+  video.pause();
+});
+</script>
+
+</body>
+</html>
