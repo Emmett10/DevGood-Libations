@@ -1,15 +1,7 @@
-exports.handler = async (event) => {
+export const handler = async (event) => {
   try {
-    let body = {};
-
-    // SAFE parsing (prevents crash)
-    if (event.body) {
-      body = typeof event.body === "string"
-        ? JSON.parse(event.body)
-        : event.body;
-    }
-
-    const password = body.password || "";
+    const body = event.body ? JSON.parse(event.body) : {};
+    const password = body.password ?? "";
 
     const correctPassword = process.env.SITE_PASSWORD;
 
@@ -17,7 +9,7 @@ exports.handler = async (event) => {
       return {
         statusCode: 500,
         body: JSON.stringify({
-          error: "Missing environment variable SITE_PASSWORD"
+          error: "SITE_PASSWORD is missing in Netlify env vars"
         }),
       };
     }
