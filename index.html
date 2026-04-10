@@ -18,7 +18,6 @@
 
     h1 {
       margin-top: 40px;
-      font-size: 32px;
     }
 
     .video-container {
@@ -85,28 +84,41 @@ const poster = document.getElementById("poster");
 const video = document.getElementById("video");
 const passwordInput = document.getElementById("passwordInput");
 
-passwordInput.addEventListener("keydown", async (e) => {
-  if (e.key !== "Enter") return;
-
+async function submitPassword() {
   const password = passwordInput.value;
 
-  const res = await fetch("/.netlify/functions/check-password", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({ password })
-  });
+  console.log("Sending password:", password);
 
-  const data = await res.json();
+  try {
+    const res = await fetch("/.netlify/functions/check-password", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ password })
+    });
 
-  if (data.success || data.match) {
-    overlay.style.display = "none";
-    poster.style.display = "none";
-    video.play().catch(() => {});
-  } else {
-    alert("Wrong password");
-    passwordInput.value = "";
+    const data = await res.json();
+
+    console.log("Response:", data);
+
+    if (data.success || data.match) {
+      overlay.style.display = "none";
+      poster.style.display = "none";
+      video.play().catch(() => {});
+    } else {
+      alert("Wrong password");
+      passwordInput.value = "";
+    }
+  } catch (err) {
+    console.error(err);
+    alert("Server error");
+  }
+}
+
+passwordInput.addEventListener("keydown", (e) => {
+  if (e.key === "Enter") {
+    submitPassword();
   }
 });
 </script>
