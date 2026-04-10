@@ -5,13 +5,18 @@ exports.handler = async (event) => {
 
     const correctPassword = process.env.SITE_PASSWORD;
 
+    // Safety check: env variable missing
     if (!correctPassword) {
       return {
         statusCode: 500,
-        body: JSON.stringify({ error: "Missing SITE_PASSWORD env var" }),
+        body: JSON.stringify({
+          success: false,
+          error: "SITE_PASSWORD is not set in Netlify environment variables"
+        }),
       };
     }
 
+    // Compare passwords
     if (password === correctPassword) {
       return {
         statusCode: 200,
@@ -27,7 +32,10 @@ exports.handler = async (event) => {
   } catch (err) {
     return {
       statusCode: 500,
-      body: JSON.stringify({ error: err.message }),
+      body: JSON.stringify({
+        success: false,
+        error: err.message
+      }),
     };
   }
 };
