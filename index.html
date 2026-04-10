@@ -4,16 +4,10 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Good Libations - Home</title>
+
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
 
   <style>
-    @font-face {
-      font-family: "MADE Sunflower";
-      src: url("fonts/MADE_Sunflower.woff2") format("woff2"),
-           url("fonts/MADE_Sunflower.woff") format("woff"),
-           url("fonts/MADE_Sunflower.otf") format("opentype");
-    }
-
     html, body {
       margin: 0;
       padding: 0;
@@ -33,107 +27,74 @@
 
     h1 {
       font-family: 'Times New Roman', serif;
-      font-weight: bold;
       font-size: 2vw;
       margin-bottom: 40px;
-      line-height: 1;
     }
 
     h1 span { display: block; }
 
-    @media (max-width: 600px) {
-      h1 { font-size: 6vw; }
-    }
-
     h2 {
-      font-family: "MADE Sunflower", serif;
+      font-family: serif;
       font-size: 2rem;
-      letter-spacing: 2px;
       margin-bottom: 20px;
-      text-transform: uppercase;
     }
 
     .video-wrapper {
       width: 100%;
       max-width: 800px;
-      margin-bottom: 30px;
     }
 
-    /* 4:3 ratio wrapper using padding-top hack */
     .video-container {
       position: relative;
       width: 100%;
-      padding-top: 75%; /* 4:3 aspect ratio */
+      padding-top: 75%;
       background: black;
-      overflow: hidden;
     }
 
-    /* Poster image */
     .video-poster {
       position: absolute;
-      top: 0; left: 0;
-      width: 100%;
-      height: 100%;
-      background: url('JoshLeos.png') center center / cover no-repeat;
+      inset: 0;
+      background: url("JoshLeos.png") center/cover no-repeat;
       z-index: 3;
     }
 
-    /* Video */
-    .video-container video {
+    video {
       position: absolute;
-      top: 0; left: 0;
+      inset: 0;
       width: 100%;
       height: 100%;
-      object-fit: contain; /* preserve 4:3 ratio with black bars */
+      object-fit: contain;
       background: black;
       z-index: 2;
     }
 
-    /* Password overlay */
     .video-overlay {
       position: absolute;
-      top: 0; left: 0;
-      width: 100%;
-      height: 100%;
+      inset: 0;
       background: rgba(0,0,0,0.6);
-      z-index: 4;
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
+      z-index: 4;
     }
 
-    .lock-icon {
-      font-size: 0.8rem;
-      margin-bottom: 6px;
-      letter-spacing: 1px;
-      font-weight: bold;
-    }
-
-    .password-box input {
-      padding: 5px;
-      width: 120px;
-      font-size: 0.7rem;
-      border-radius: 4px;
-      border: 2px solid #fff;
-      background: transparent;
-      color: #fff;
+    .video-overlay input {
+      padding: 8px;
       text-align: center;
-    }
-
-    .social-icon {
-      margin-top: 10px;
+      border: 2px solid white;
+      background: transparent;
+      color: white;
     }
 
     .social-icon img {
       height: 50px;
+      margin-top: 20px;
     }
 
     footer {
       margin-top: auto;
-      font-family: "MADE Sunflower", serif;
       font-size: 0.9rem;
-      padding: 10px;
     }
   </style>
 </head>
@@ -150,36 +111,28 @@
 <div class="video-wrapper">
   <div class="video-container">
 
-    <!-- Poster image -->
     <div class="video-poster" id="videoPoster"></div>
 
-    <!-- Video -->
     <video
       id="mainVideo"
       muted
       loop
       playsinline
-      preload="auto"
       controls
-      controlsList="nodownload"
-      crossorigin="anonymous"
-      oncontextmenu="return false">
+      controlsList="nodownload">
       <source src="https://devgood-libations.b-cdn.net/new-josh-upload.mp4" type="video/mp4">
     </video>
 
-    <!-- Password overlay -->
     <div class="video-overlay" id="overlay">
-      <div class="lock-icon">ENTER PASSWORD</div>
-      <div class="password-box">
-        <input type="text" id="passwordInput" autocomplete="off" placeholder="Password">
-      </div>
+      <div style="margin-bottom:10px;">ENTER PASSWORD</div>
+      <input type="password" id="passwordInput" placeholder="Password">
     </div>
 
   </div>
 
   <div class="social-icon">
-    <a href="https://instagram.com/goodlibes?igsh=NTc4MTlwNjQ2YQ==" target="_blank" rel="noopener">
-      <img src="IG.avif" alt="Instagram">
+    <a href="https://instagram.com/goodlibes?igsh=NTc4MTlwNjQ2YQ==" target="_blank">
+      <img src="IG.avif" />
     </a>
   </div>
 </div>
@@ -194,33 +147,37 @@ const video = document.getElementById("mainVideo");
 const poster = document.getElementById("videoPoster");
 const passwordInput = document.getElementById("passwordInput");
 
-let enteredPassword = "";
-const correctPassword = "CrunchwrapSupreme";
+passwordInput.addEventListener("change", async () => {
+  try {
+    const res = await fetch("/.netlify/functions/check-password", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        password: passwordInput.value
+      })
+    });
 
-// Listen for password input and check immediately as it's typed
-passwordInput.addEventListener("input", e => {
-  const value = e.target.value;
-  const lastChar = value[value.length - 1] || "";
+    const data = await res.json();
 
-  if (value.length > enteredPassword.length) {
-    enteredPassword += lastChar;
-  } else {
-    enteredPassword = enteredPassword.slice(0, value.length);
-  }
-
-  e.target.value = "*".repeat(enteredPassword.length);
-
-  if (enteredPassword === correctPassword) {
-    overlay.style.display = "none"; // hide overlay
-    poster.style.display = "none";  // hide poster
-    video.play().catch(err => console.log("Playback blocked:", err));
+    if (data.success) {
+      overlay.style.display = "none";
+      poster.style.display = "none";
+      video.play().catch(err => console.log(err));
+    } else {
+      alert("Wrong password");
+      passwordInput.value = "";
+    }
+  } catch (err) {
+    console.error("Error:", err);
+    alert("Server error");
   }
 });
 
-// Ensure video doesn't auto-show on load
 video.addEventListener("loadeddata", () => {
-  video.currentTime = 0;
   video.pause();
+  video.currentTime = 0;
 });
 </script>
 
