@@ -1,16 +1,14 @@
-export const handler = async (event) => {
+exports.handler = async (event) => {
   try {
     const body = event.body ? JSON.parse(event.body) : {};
-    const password = body.password ?? "";
+    const password = body.password || "";
 
     const correctPassword = process.env.SITE_PASSWORD;
 
     if (!correctPassword) {
       return {
         statusCode: 500,
-        body: JSON.stringify({
-          error: "SITE_PASSWORD is missing in Netlify env vars"
-        }),
+        body: JSON.stringify({ error: "Missing SITE_PASSWORD env var" }),
       };
     }
 
@@ -29,9 +27,7 @@ export const handler = async (event) => {
   } catch (err) {
     return {
       statusCode: 500,
-      body: JSON.stringify({
-        error: err.message
-      }),
+      body: JSON.stringify({ error: err.message }),
     };
   }
 };
