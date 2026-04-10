@@ -1,17 +1,29 @@
 exports.handler = async (event) => {
-  const { password } = JSON.parse(event.body || "{}");
+  try {
+    const body = event.body ? JSON.parse(event.body) : {};
+    const password = body.password || "";
 
-  const correctPassword = process.env.SITE_PASSWORD;
+    const correctPassword = process.env.SITE_PASSWORD;
 
-  if (password === correctPassword) {
+    console.log("Received:", password);
+    console.log("Expected:", correctPassword);
+
+    if (password === correctPassword) {
+      return {
+        statusCode: 200,
+        body: JSON.stringify({ success: true }),
+      };
+    }
+
     return {
-      statusCode: 200,
-      body: JSON.stringify({ success: true }),
+      statusCode: 401,
+      body: JSON.stringify({ success: false }),
+    };
+
+  } catch (err) {
+    return {
+      statusCode: 500,
+      body: JSON.stringify({ error: err.message }),
     };
   }
-
-  return {
-    statusCode: 401,
-    body: JSON.stringify({ success: false }),
-  };
 };
