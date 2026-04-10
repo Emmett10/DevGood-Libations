@@ -1,12 +1,26 @@
 exports.handler = async (event) => {
   try {
-    const body = event.body ? JSON.parse(event.body) : {};
+    let body = {};
+
+    // SAFE parsing (prevents crash)
+    if (event.body) {
+      body = typeof event.body === "string"
+        ? JSON.parse(event.body)
+        : event.body;
+    }
+
     const password = body.password || "";
 
     const correctPassword = process.env.SITE_PASSWORD;
 
-    console.log("Received:", password);
-    console.log("Expected:", correctPassword);
+    if (!correctPassword) {
+      return {
+        statusCode: 500,
+        body: JSON.stringify({
+          error: "Missing environment variable SITE_PASSWORD"
+        }),
+      };
+    }
 
     if (password === correctPassword) {
       return {
@@ -23,7 +37,9 @@ exports.handler = async (event) => {
   } catch (err) {
     return {
       statusCode: 500,
-      body: JSON.stringify({ error: err.message }),
+      body: JSON.stringify({
+        error: err.message
+      }),
     };
   }
 };
