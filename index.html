@@ -5,179 +5,109 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Good Libations - Home</title>
 
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
-
   <style>
     html, body {
       margin: 0;
       padding: 0;
       min-height: 100vh;
-      background: #000;
-      color: #fff;
+      background: black;
+      color: white;
       font-family: Arial, sans-serif;
-    }
-
-    body {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 50px 20px;
       text-align: center;
     }
 
     h1 {
-      font-family: 'Times New Roman', serif;
-      font-size: 2vw;
-      margin-bottom: 40px;
-    }
-
-    h1 span { display: block; }
-
-    h2 {
-      font-family: serif;
-      font-size: 2rem;
-      margin-bottom: 20px;
-    }
-
-    .video-wrapper {
-      width: 100%;
-      max-width: 800px;
+      margin-top: 40px;
+      font-size: 32px;
     }
 
     .video-container {
       position: relative;
-      width: 100%;
-      padding-top: 75%;
-      background: black;
-    }
-
-    .video-poster {
-      position: absolute;
-      inset: 0;
-      background: url("JoshLeos.png") center/cover no-repeat;
-      z-index: 3;
+      width: 80%;
+      max-width: 800px;
+      margin: 40px auto;
     }
 
     video {
-      position: absolute;
-      inset: 0;
       width: 100%;
-      height: 100%;
-      object-fit: contain;
       background: black;
-      z-index: 2;
     }
 
-    .video-overlay {
+    .overlay {
       position: absolute;
       inset: 0;
-      background: rgba(0,0,0,0.6);
+      background: rgba(0,0,0,0.7);
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      z-index: 4;
     }
 
-    .video-overlay input {
-      padding: 8px;
+    .overlay input {
+      padding: 10px;
+      font-size: 16px;
       text-align: center;
-      border: 2px solid white;
+      border: 1px solid white;
       background: transparent;
       color: white;
     }
 
-    .social-icon img {
-      height: 50px;
-      margin-top: 20px;
-    }
-
-    footer {
-      margin-top: auto;
-      font-size: 0.9rem;
+    .poster {
+      position: absolute;
+      inset: 0;
+      background: url("JoshLeos.png") center/cover no-repeat;
     }
   </style>
 </head>
 
 <body>
 
-<h1>
-  <span>GOOD</span>
-  <span>LIBATIONS</span>
-</h1>
+<h1>GOOD LIBATIONS</h1>
 
-<h2>JOSH LEOS</h2>
+<div class="video-container">
 
-<div class="video-wrapper">
-  <div class="video-container">
+  <div class="poster" id="poster"></div>
 
-    <div class="video-poster" id="videoPoster"></div>
+  <video id="video" muted playsinline controls>
+    <source src="https://devgood-libations.b-cdn.net/new-josh-upload.mp4" type="video/mp4">
+  </video>
 
-    <video
-      id="mainVideo"
-      muted
-      loop
-      playsinline
-      controls
-      controlsList="nodownload">
-      <source src="https://devgood-libations.b-cdn.net/new-josh-upload.mp4" type="video/mp4">
-    </video>
-
-    <div class="video-overlay" id="overlay">
-      <div style="margin-bottom:10px;">ENTER PASSWORD</div>
-      <input type="password" id="passwordInput" placeholder="Password">
-    </div>
-
+  <div class="overlay" id="overlay">
+    <div style="margin-bottom:10px;">ENTER PASSWORD</div>
+    <input type="password" id="passwordInput" placeholder="Password" />
   </div>
 
-  <div class="social-icon">
-    <a href="https://instagram.com/goodlibes?igsh=NTc4MTlwNjQ2YQ==" target="_blank">
-      <img src="IG.avif" />
-    </a>
-  </div>
 </div>
-
-<footer>
-  © 2025 Good Libations — All Rights Reserved
-</footer>
 
 <script>
 const overlay = document.getElementById("overlay");
-const video = document.getElementById("mainVideo");
-const poster = document.getElementById("videoPoster");
+const poster = document.getElementById("poster");
+const video = document.getElementById("video");
 const passwordInput = document.getElementById("passwordInput");
 
-passwordInput.addEventListener("change", async () => {
-  try {
-    const res = await fetch("/.netlify/functions/check-password", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        password: passwordInput.value
-      })
-    });
+passwordInput.addEventListener("keydown", async (e) => {
+  if (e.key !== "Enter") return;
 
-    const data = await res.json();
+  const password = passwordInput.value;
 
-    if (data.success) {
-      overlay.style.display = "none";
-      poster.style.display = "none";
-      video.play().catch(err => console.log(err));
-    } else {
-      alert("Wrong password");
-      passwordInput.value = "";
-    }
-  } catch (err) {
-    console.error("Error:", err);
-    alert("Server error");
+  const res = await fetch("/.netlify/functions/check-password", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({ password })
+  });
+
+  const data = await res.json();
+
+  if (data.success || data.match) {
+    overlay.style.display = "none";
+    poster.style.display = "none";
+    video.play().catch(() => {});
+  } else {
+    alert("Wrong password");
+    passwordInput.value = "";
   }
-});
-
-video.addEventListener("loadeddata", () => {
-  video.pause();
-  video.currentTime = 0;
 });
 </script>
 
