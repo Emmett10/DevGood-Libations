@@ -189,10 +189,8 @@ const passwordInput = document.getElementById("passwordInput");
 
 let enteredPassword = "";
 
-// 🔐 SHA-256 hash of "CrunchwrapSupreme"
 const correctHash = "9d366d854d74392bd934c6ce88c94c415017758c31d29f624e2c8a9bea686d17";
 
-// Hash function
 async function hashPassword(password) {
   const encoder = new TextEncoder();
   const data = encoder.encode(password);
