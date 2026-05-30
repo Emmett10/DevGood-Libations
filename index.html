@@ -1,230 +1,224 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Good Libations - Home</title>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Good Libations</title>
 
-  <style>
-    @font-face {
-      font-family: "MADE Sunflower";
-      src: url("fonts/MADE_Sunflower.woff2") format("woff2"),
-           url("fonts/MADE_Sunflower.woff") format("woff"),
-           url("fonts/MADE_Sunflower.otf") format("opentype");
-    }
+<style>
+body {
+  margin: 0;
+  padding: 50px 20px;
+  background: #000;
+  color: #fff;
+  font-family: Arial, sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+}
 
-    html, body {
-      margin: 0;
-      padding: 0;
-      min-height: 100vh;
-      background: #000;
-      color: #fff;
-      font-family: Arial, sans-serif;
-    }
+/* ✅ SMALLER LOGO */
+.logo {
+  max-width: 260px;
+  margin-bottom: 60px;
+}
+.logo img {
+  width: 100%;
+}
 
-    body {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 50px 20px;
-      text-align: center;
-    }
+/* layout */
+.video-wrapper {
+  width: 100%;
+  max-width: 800px;
+  margin-bottom: 80px;
+}
 
-    h1 {
-      font-family: 'Times New Roman', serif;
-      font-weight: bold;
-      font-size: 2vw;
-      margin-bottom: 40px;
-      line-height: 1;
-    }
+.video-container {
+  position: relative;
+  width: 100%;
+  padding-top: 75%;
+  overflow: hidden;
+  background: #000;
+}
 
-    h1 span { display: block; }
+/* ✅ NEW video background */
+#newVideoBg {
+  background: url("GoodLibationsIntro.png") center / cover no-repeat;
+}
 
-    @media (max-width: 600px) {
-      h1 { font-size: 6vw; }
-    }
+/* ✅ ORIGINAL poster */
+.video-poster {
+  position: absolute;
+  inset: 0;
+  background: url("JoshLeos.png") center / cover no-repeat;
+  z-index: 2;
+}
 
-    h2 {
-      font-family: "MADE Sunflower", serif;
-      font-size: 2rem;
-      letter-spacing: 2px;
-      margin-bottom: 20px;
-      text-transform: uppercase;
-    }
+.stream-wrapper {
+  position: absolute;
+  inset: 0;
+  display: none;
+  z-index: 1;
+}
 
-    .video-wrapper {
-      width: 100%;
-      max-width: 800px;
-      margin-bottom: 30px;
-    }
+iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
 
-    .video-container {
-      position: relative;
-      width: 100%;
-      padding-top: 75%;
-      background: black;
-      overflow: hidden;
-    }
+/* overlay */
+.video-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 3;
+}
 
-    .video-poster {
-      position: absolute;
-      top: 0; left: 0;
-      width: 100%;
-      height: 100%;
-      background: url('JoshLeos.png') center center / cover no-repeat;
-      z-index: 3;
-    }
+.lock-icon {
+  font-size: 0.8rem;
+  margin-bottom: 8px;
+  letter-spacing: 1px;
+  font-weight: bold;
+}
 
-    .video-container video {
-      position: absolute;
-      top: 0; left: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
-      background: black;
-      z-index: 2;
-    }
+.password-box input {
+  padding: 6px;
+  width: 130px;
+  font-size: 0.75rem;
+  border-radius: 4px;
+  border: 2px solid #fff;
+  background: transparent;
+  color: #fff;
+  text-align: center;
+}
 
-    .video-overlay {
-      position: absolute;
-      top: 0; left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0,0,0,0.6);
-      z-index: 4;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-    }
+/* ✅ INSTAGRAM (no extra gap now) */
+.social-icon {
+  margin-bottom: 0;
+}
+.social-icon img {
+  height: 50px;
+  transition: transform 0.2s ease;
+}
+.social-icon img:hover {
+  transform: scale(1.1);
+}
 
-    .lock-icon {
-      font-size: 0.8rem;
-      margin-bottom: 6px;
-      letter-spacing: 1px;
-      font-weight: bold;
-    }
-
-    .password-box input {
-      padding: 5px;
-      width: 120px;
-      font-size: 0.7rem;
-      border-radius: 4px;
-      border: 2px solid #fff;
-      background: transparent;
-      color: #fff;
-      text-align: center;
-    }
-
-    .social-icon {
-      margin-top: 10px;
-    }
-
-    .social-icon img {
-      height: 50px;
-    }
-
-    footer {
-      margin-top: auto;
-      font-family: "MADE Sunflower", serif;
-      font-size: 0.9rem;
-      padding: 10px;
-    }
-  </style>
+/* ✅ FOOTER tighter */
+footer {
+  margin-top: auto;
+  font-size: 0.9rem;
+  padding: 10px 0;
+}
+</style>
 </head>
 
 <body>
 
-<h1>
-  <span>GOOD</span>
-  <span>LIBATIONS</span>
-</h1>
+<!-- ✅ LOGO -->
+<div class="logo">
+  <img src="new%20goodlibes%20logo.png" alt="Good Libations Logo">
+</div>
 
-<h2>JOSH LEOS</h2>
-
+<!-- ✅ NEW VIDEO -->
 <div class="video-wrapper">
-  <div class="video-container">
+  <div class="video-container" id="newVideoBg">
 
-    <div class="video-poster" id="videoPoster"></div>
+    <div class="stream-wrapper" id="stream2">
+      <iframe src="https://player.mediadelivery.net/embed/658521/2fb2db85-2249-4900-9617-d16750c9b328?responsive=true"
+        allow="accelerometer; gyroscope; encrypted-media; picture-in-picture"
+        allowfullscreen>
+      </iframe>
+    </div>
 
-    <video
-      id="mainVideo"
-      muted
-      loop
-      playsinline
-      preload="auto"
-      controls
-      controlsList="nodownload"
-      crossorigin="anonymous"
-      oncontextmenu="return false">
-      <source src="https://devgood-libations.b-cdn.net/new-josh-upload.mp4" type="video/mp4">
-    </video>
-
-    <div class="video-overlay" id="overlay">
+    <div class="video-overlay" id="overlay2">
       <div class="lock-icon">ENTER PASSWORD</div>
       <div class="password-box">
-        <input type="text" id="passwordInput" autocomplete="off" placeholder="Password">
+        <input type="password" id="pass2" placeholder="Password">
       </div>
     </div>
 
   </div>
+</div>
 
-  <div class="social-icon">
-    <a href="https://instagram.com/goodlibes?igsh=NTc4MTlwNjQ2YQ==" target="_blank" rel="noopener">
-      <img src="IG.avif" alt="Instagram">
-    </a>
+<!-- ✅ ORIGINAL VIDEO -->
+<div class="video-wrapper">
+  <div class="video-container">
+
+    <div class="video-poster" id="poster"></div>
+
+    <div class="stream-wrapper" id="stream">
+      <iframe src="https://player.mediadelivery.net/embed/658521/41f6d25c-2fb5-4d05-8d15-8bf411f450f5?responsive=true"
+        allow="accelerometer; gyroscope; encrypted-media; picture-in-picture"
+        allowfullscreen>
+      </iframe>
+    </div>
+
+    <div class="video-overlay" id="overlay">
+      <div class="lock-icon">ENTER PASSWORD</div>
+      <div class="password-box">
+        <input type="password" id="pass" placeholder="Password">
+      </div>
+    </div>
+
   </div>
 </div>
 
+<!-- ✅ INSTAGRAM -->
+<div class="social-icon">
+  <a href="https://instagram.com/goodlibes?igsh=NTc4MTlwNjQ2YQ==" target="_blank">
+    <img src="IG.avif" alt="Instagram">
+  </a>
+</div>
+
+<!-- ✅ FOOTER -->
 <footer>
-  © 2025 Good Libations — All Rights Reserved
+  © 2026 Good Libations — All Rights Reserved
 </footer>
 
 <script>
-const overlay = document.getElementById("overlay");
-const video = document.getElementById("mainVideo");
-const poster = document.getElementById("videoPoster");
-const passwordInput = document.getElementById("passwordInput");
-
-let enteredPassword = "";
-
-const correctHash = "9d366d854d74392bd934c6ce88c94c415017758c31d29f624e2c8a9bea686d17";
-
 async function hashPassword(password) {
-  const encoder = new TextEncoder();
-  const data = encoder.encode(password);
-  const hashBuffer = await crypto.subtle.digest("SHA-256", data);
-  const hashArray = Array.from(new Uint8Array(hashBuffer));
-  return hashArray.map(b => b.toString(16).padStart(2, "0")).join("");
+  const data = new TextEncoder().encode(password);
+  const hash = await crypto.subtle.digest("SHA-256", data);
+  return Array.from(new Uint8Array(hash))
+    .map(b => b.toString(16).padStart(2, "0"))
+    .join("");
 }
 
-// Input listener
-passwordInput.addEventListener("input", async (e) => {
-  const value = e.target.value;
-  const lastChar = value[value.length - 1] || "";
+/* ✅ NEW PASSWORD */
+const REAL_PASSWORD = "parkingtickets";
+let correctHash2 = "";
 
-  if (value.length > enteredPassword.length) {
-    enteredPassword += lastChar;
-  } else {
-    enteredPassword = enteredPassword.slice(0, value.length);
-  }
+(async () => {
+  correctHash2 = await hashPassword(REAL_PASSWORD);
+})();
 
-  e.target.value = "*".repeat(enteredPassword.length);
-
-  const hashed = await hashPassword(enteredPassword);
-
-  if (hashed === correctHash) {
-    overlay.style.display = "none";
-    poster.style.display = "none";
-    video.play().catch(err => console.log("Playback blocked:", err));
+document.getElementById("pass2").addEventListener("input", async (e) => {
+  const hashed = await hashPassword(e.target.value.trim());
+  if (hashed === correctHash2) {
+    document.getElementById("overlay2").style.display = "none";
+    document.getElementById("stream2").style.display = "block";
   }
 });
 
-// Prevent autoplay visibility
-video.addEventListener("loadeddata", () => {
-  video.currentTime = 0;
-  video.pause();
+/* ✅ ORIGINAL PASSWORD */
+const correctHash = "9d366d854d74392bd934c6ce88c94c415017758c31d29f624e2c8a9bea686d17";
+
+document.getElementById("pass").addEventListener("input", async (e) => {
+  const hashed = await hashPassword(e.target.value.trim());
+  if (hashed === correctHash) {
+    document.getElementById("overlay").style.display = "none";
+    document.getElementById("poster").style.display = "none";
+    document.getElementById("stream").style.display = "block";
+  }
 });
 </script>
 
