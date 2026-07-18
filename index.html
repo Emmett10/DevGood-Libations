@@ -42,12 +42,16 @@ body {
   background: #000;
 }
 
-/* ✅ NEW video background */
-#newVideoBg {
+#DominiqueJackson_Bg {
+  background: url("DominiqueJackson.png") center / cover no-repeat;
+}
+
+/* SD Video Background */
+#SD_Bg {
   background: url("GoodLibationsIntro.png") center / cover no-repeat;
 }
 
-/* ✅ ORIGINAL poster */
+/* Josh Leos Background */
 .video-poster {
   position: absolute;
   inset: 0;
@@ -123,14 +127,35 @@ footer {
 
 <body>
 
-<!-- ✅ LOGO -->
+<!--  Good Libes LOGO -->
 <div class="logo">
   <img src="new%20goodlibes%20logo.png" alt="Good Libations Logo">
 </div>
 
-<!-- ✅ NEW VIDEO -->
+<!-- Dominique Jackson's Video -->
 <div class="video-wrapper">
-  <div class="video-container" id="newVideoBg">
+  <div class="video-container" id="DominiqueJackson_Bg">
+
+    <div class="stream-wrapper" id="stream3">
+      <iframe src="https://player.mediadelivery.net/play/658521/d0a00f04-16f8-4ab6-93ef-c816d9de7e26?responsive=true&autoplay=false"
+        allow="accelerometer; gyroscope; encrypted-media; picture-in-picture"
+        allowfullscreen>
+      </iframe>
+    </div>
+
+    <div class="video-overlay" id="overlay3">
+      <div class="lock-icon">ENTER PASSWORD</div>
+      <div class="password-box">
+        <input type="password" id="pass3" placeholder="Password">
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- SD Video -->
+<div class="video-wrapper">
+  <div class="video-container" id="SD_Bg">
 
     <div class="stream-wrapper" id="stream2">
       <iframe src="https://player.mediadelivery.net/embed/658521/2fb2db85-2249-4900-9617-d16750c9b328?responsive=true&autoplay=false"
@@ -149,20 +174,18 @@ footer {
   </div>
 </div>
 
-<!-- ✅ ORIGINAL VIDEO -->
+<!-- Josh Leos Video -->
 <div class="video-wrapper">
   <div class="video-container">
 
     <div class="video-poster" id="poster"></div>
 
     <div class="stream-wrapper" id="stream">
-      <iframe src="https://player.mediadelivery.net/play/658521/3fa6c3b4-0138-480b-a60d-eeb1484f5a51?responsive=true"
-      
+      <iframe src="https://player.mediadelivery.net/embed/658521/41f6d25c-2fb5-4d05-8d15-8bf411f450f5?responsive=true&autoplay=false"
         allow="accelerometer; gyroscope; encrypted-media; picture-in-picture"
         allowfullscreen>
       </iframe>
     </div>
-
 
     <div class="video-overlay" id="overlay">
       <div class="lock-icon">ENTER PASSWORD</div>
@@ -174,14 +197,14 @@ footer {
   </div>
 </div>
 
-<!-- ✅ INSTAGRAM -->
+<!-- Instagram Link -->
 <div class="social-icon">
   <a href="https://instagram.com/goodlibes?igsh=NTc4MTlwNjQ2YQ==" target="_blank">
     <img src="IG.avif" alt="Instagram">
   </a>
 </div>
 
-<!-- ✅ FOOTER -->
+<!-- FOOTER -->
 <footer>
   © 2026 Good Libations — All Rights Reserved
 </footer>
@@ -195,7 +218,7 @@ async function hashPassword(password) {
     .join("");
 }
 
-/* ✅ NEW PASSWORD */
+/* SD Video PASSWORD */
 const REAL_PASSWORD = "parkingtickets";
 let correctHash2 = "";
 
@@ -211,7 +234,24 @@ document.getElementById("pass2").addEventListener("input", async (e) => {
   }
 });
 
-/* ✅ ORIGINAL PASSWORD */
+/* Dominique Jackson PASSWORD */
+const DominiqueJackson_PASSWORD = "fiftyfiftymartini";
+let correctHash3 = "";
+
+(async () => {
+  correctHash3 = await hashPassword(DominiqueJackson_PASSWORD);
+})();
+
+document.getElementById("pass3").addEventListener("input", async (e) => {
+  const hashed = await hashPassword(e.target.value.trim());
+
+  if (hashed === correctHash3) {
+    document.getElementById("overlay3").style.display = "none";
+    document.getElementById("stream3").style.display = "block";
+  }
+});
+
+/* Josh Leos Video PASSWORD */
 const correctHash = "9d366d854d74392bd934c6ce88c94c415017758c31d29f624e2c8a9bea686d17";
 
 document.getElementById("pass").addEventListener("input", async (e) => {
